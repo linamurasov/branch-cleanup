@@ -1,7 +1,6 @@
 name: Branch Information Workflow
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
@@ -11,6 +10,10 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v3
 
+    - name: Fetch all remote branches
+      run: |
+        git fetch --all
+        
     - name: Print all branches in the repo
       run: |
         echo "All branches in the repository:"
