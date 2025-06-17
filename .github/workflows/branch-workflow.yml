@@ -1,0 +1,31 @@
+name: Branch Information Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  branch_info:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Print all branches in the repo
+      run: |
+        echo "All branches in the repository:"
+        git branch -r
+
+    - name: Print all branches that are merged with main
+      run: |
+        echo "Branches merged with main:"
+        git branch --merged main
+
+    - name: Print all branches that are not merged with main
+      run: |
+        echo "Branches not merged with main:"
+        git branch --no-merged
+
+    - name: Print the date of the last commit for all branches merged with main
+      run: |
+        echo "Last commit date for merged branches:"
+        git log -1 --format=%cd --date=short
