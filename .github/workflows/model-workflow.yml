@@ -1,4 +1,4 @@
-name: Branch Information Workflow
+name: Model Workflow
 
 on:
   workflow_dispatch:
