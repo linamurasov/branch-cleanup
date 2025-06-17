@@ -1,6 +1,7 @@
 name: Branch Information Workflow
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -13,18 +14,18 @@ jobs:
     - name: Print all branches in the repo
       run: |
         echo "All branches in the repository:"
-        git branch -r
-
+        git branch -a
+        
     - name: Print all branches that are merged with main
       run: |
         echo "Branches merged with main:"
         git branch --merged main
-
+        
     - name: Print all branches that are not merged with main
       run: |
         echo "Branches not merged with main:"
-        git branch --no-merged
-
+        git branch -r --no-merged main
+        
     - name: Print the date of the last commit for all branches merged with main
       run: |
         echo "Last commit date for merged branches:"
