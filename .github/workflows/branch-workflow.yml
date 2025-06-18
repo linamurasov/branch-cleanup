@@ -10,25 +10,27 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # WICHTIG: komplette Historie holen
 
     - name: Fetch all remote branches and ensure they are up-to-date
       run: |
         git fetch --all
         git checkout -B main origin/main
-        
+
     - name: Print all branches in the repo
       run: |
         echo "All branches in the repository:"
         git branch -a
-        
-    - name: Print all branches that are merged with main
+
+    - name: Print all remote branches that are merged with main
       run: |
-        echo "Branches merged with main:"
+        echo "Remote branches merged with main:"
         git branch -r --merged main
-        
-    - name: Print all branches that are not merged with main
+
+    - name: Print all remote branches that are not merged with main
       run: |
-        echo "Branches not merged with main:"
+        echo "Remote branches NOT merged with main:"
         git branch -r --no-merged main
         
     - name: Print the date of the last commit for all branches merged with main
