@@ -75,7 +75,7 @@ jobs:
             echo "Timestamp of last commit: $time_commit"
 
             time_current = date +%s
-            echo "Timestamp of last commit: $time_current
+            echo "Timestamp of last commit: $time_current"
             
           fi
         done
