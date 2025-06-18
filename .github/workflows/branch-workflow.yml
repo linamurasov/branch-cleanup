@@ -25,7 +25,7 @@ jobs:
     - name: Print all branches that are merged with main
       run: |
         echo "Branches merged with main:"
-        git branch --merged main
+        git branch -r --merged main
         
     - name: Print all branches that are not merged with main
       run: |
