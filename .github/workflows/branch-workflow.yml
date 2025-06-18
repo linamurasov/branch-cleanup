@@ -32,6 +32,15 @@ jobs:
       run: |
         echo "Remote branches NOT merged with main:"
         git branch -r --no-merged main
+
+    - name: Give Merge Info for specific branch 
+      run: |
+        branch=$"feature-3"
+        if git branch --merged main | grep -q "$branch"; then
+          echo "✅ $branch is merged into main"
+        else
+          echo "❌ $branch is NOT merged into main"
+        fi
         
     - name: Print the date of the last commit for all branches merged with main
       run: |
