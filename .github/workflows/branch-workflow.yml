@@ -13,8 +13,8 @@ jobs:
 
     - name: Fetch all remote branches and ensure they are up-to-date
       run: |
-      git fetch --all
-      git checkout -B main origin/main
+        git fetch --all
+        git checkout -B main origin/main
         
     - name: Print all branches in the repo
       run: |
