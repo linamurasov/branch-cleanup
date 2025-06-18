@@ -71,10 +71,10 @@ jobs:
             echo "Last commit date for $branch:"
             git log -1 --format=%cd #--date=short
 
-            time_commit = git log -1 --pretty=format:"%at"
+            time_commit = $(git log -1 --pretty=format:"%at")
             echo "Timestamp of last commit: $time_commit"
 
-            time_current = date +%s
+            time_current = $(date +%s)
             echo "Timestamp of last commit: $time_current"
             
           fi
