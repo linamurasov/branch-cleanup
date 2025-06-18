@@ -42,7 +42,6 @@ jobs:
     # Give Merge Info about Branches: Loop 
     - name: MERGE INFO
       run: |
-        branch=$"feature-3"
         for $branch in for-each-ref refs/remotes/origin/; do
           if git branch --merged main | grep -q "$branch"; then
             echo "✅ $branch is merged into main"
