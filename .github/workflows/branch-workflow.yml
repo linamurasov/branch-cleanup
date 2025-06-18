@@ -48,7 +48,7 @@ jobs:
           if [[ "$branch" == "origin/HEAD" ]]; then
             continue
           fi
-          if git branch -r --merged origin/main | grep -q "^  $branch$"; then
+          if git branch -r --merged origin/main | grep -q "$branch$"; then
             echo "✅ $branch is merged into origin/main"
           else
             echo "❌ $branch is NOT merged into origin/main"
