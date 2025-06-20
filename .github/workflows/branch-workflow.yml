@@ -24,10 +24,9 @@ jobs:
         git fetch --all
         #git checkout -B main origin/main
     
-    - name: List all branches
+    - name: List all branches in repo
       run: |
-        echo "All branches in the repository:"
-        git branch -a
+        git branch -r
         
     - name: List merged branches
       run: |
@@ -63,7 +62,7 @@ jobs:
             echo "🟢 $branch is merged into origin/main"
             
             echo "Last commit date for $branch:"
-            git log -1 --format=%cd "$branch" #--date=short
+            git log -1 --format=%cd "$branch" --date=short
             
             time_commit=$(git log -1 --pretty=format:"%at" "$branch")
             #echo "Timestamp of last commit: $time_commit"
