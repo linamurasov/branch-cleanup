@@ -21,7 +21,7 @@ jobs:
     - name: Fetch all remote branches
       shell: pwsh
       run: |
-        git fetch --all
+        git fetch --all *> $null 2>&1
 
     - name: List all branches in repo
       shell: pwsh
