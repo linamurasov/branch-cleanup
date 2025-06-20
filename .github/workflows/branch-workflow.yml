@@ -3,8 +3,8 @@ name: Branch Deletion Workflow
 on:
   #push:
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
+  #schedule:
+  #  - cron: '*/5 * * * *'
 
 jobs:
   cleanup-old-branches:
@@ -73,8 +73,8 @@ jobs:
             time_diff=$((time_current - time_commit))
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
 
-            #cutoff=$(604800) # 1 week
-            cutoff=$(2492000) # 1 month
+            #cutoff=$((604800)) # 1 week
+            cutoff=$((2492000)) # 1 month
             
             # if last commit is older than cutoff: delete branch
             if (($time_diff > cutoff)); then
