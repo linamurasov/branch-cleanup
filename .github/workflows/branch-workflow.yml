@@ -46,10 +46,10 @@ jobs:
     - name: MERGE INFO
       run: |
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
-        # Skip symbolic reference
-          #if [[ "$branch" == "origin/main" ]]; then
-          #  continue
-          #fi
+          # Skip symbolic reference
+          if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
+            continue
+          fi
           if git branch -r --merged origin/main | grep -q "$branch"; then
             echo "🟢 $branch is merged into origin/main"
           else
@@ -61,12 +61,9 @@ jobs:
     - name: COMMIT DATE
       run: |
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
-          #if [[ "$branch" == "origin/main" ]]; then
-          #  continue
-          #fi
-          #if [[ "$branch" == "origin" ]]; then
-          #  continue
-          #fi
+          if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
+            continue
+          fi
           if git branch -r --merged origin/main | grep -q "$branch"; then
             echo "🟢 $branch is merged into origin/main"
             echo "Last commit date for $branch:"
