@@ -63,7 +63,7 @@ jobs:
           #if [[ "$branch" == "origin/main" ]]; then
           #  continue
           #fi
-          #if [[ "$branch" == "origin/" ]]; then
+          #if [[ "$branch" == "origin" ]]; then
           #  continue
           #fi
           if git branch -r --merged origin/main | grep -q "$branch"; then
@@ -79,6 +79,12 @@ jobs:
 
             time_diff=$((time_current - time_commit))
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
+
+            # if last commit is older than 1 month
+            if time_diff > 2592000
+              git branch -d $branch
+              echo "Branch $branch has been deleted successfully"
+            fi
             
           fi
         done
