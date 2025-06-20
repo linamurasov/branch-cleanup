@@ -57,6 +57,7 @@ jobs:
     # Print the date of the last commit for all branches merged with main
     - name: COMMIT DATE
       run: |
+        git fetch --all
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
           #if [[ "$branch" == "origin/main" ]]; then
           #  continue
@@ -73,7 +74,7 @@ jobs:
             echo "Timestamp of last commit: $time_commit"
 
             time_current=$(date +%s)
-            echo "Timestamp of last commit: $time_current"
+            echo "Timestamp of current time: $time_current"
 
             time_diff=$((time_current - time_commit))
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
