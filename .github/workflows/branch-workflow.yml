@@ -7,8 +7,11 @@ on:
 jobs:
   branch_info:
     runs-on: ubuntu-latest
-    steps:
 
+    permissions:
+      contents: write
+    
+    steps:
     # Checkout the repository (clone repo to runner VM)
     - name: CHECKOUT
       uses: actions/checkout@v3
