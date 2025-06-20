@@ -21,7 +21,7 @@ jobs:
     - name: Fetch all remote branches
       shell: pwsh
       run: |
-        git fetch --all *> $null 2>&1
+        git fetch --all
 
     - name: List all branches in repo
       shell: pwsh
@@ -71,7 +71,7 @@ jobs:
             $time_diff = $time_current - $time_commit
             Write-Output "Commit age: $time_diff (in sec), $([math]::Floor($time_diff / 86400)) (in days)"
 
-            if ($time_diff -lt 3000 -and $time_diff -gt 100) {
+            if ($time_diff -lt 3000 -and $time_diff -gt 30) {
               $branch_to_delete = $branch -replace "^origin/", ""
               git push origin --delete $branch_to_delete
               Write-Output "Branch $branch has been deleted successfully!"
