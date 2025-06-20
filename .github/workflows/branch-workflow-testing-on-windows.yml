@@ -1,0 +1,84 @@
+name: Branch Deletion Workflow (Testing on Windows)
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: '*/5 * * * *'
+
+jobs:
+  cleanup-old-branches:
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Fetch all remote branches
+      shell: pwsh
+      run: |
+        git fetch --all
+
+    - name: List all branches in repo
+      shell: pwsh
+      run: |
+        git branch -r
+
+    - name: List merged branches
+      shell: pwsh
+      run: |
+        Write-Output "Remote branches merged with main:"
+        git branch -r --merged main
+
+    - name: List not merged branches
+      shell: pwsh
+      run: |
+        Write-Output "Remote branches NOT merged with main:"
+        git branch -r --no-merged main
+
+    - name: Identify merged branches
+      shell: pwsh
+      run: |
+        $branches = git for-each-ref --format='%(refname:short)' refs/remotes/origin/
+        foreach ($branch in $branches) {
+          if ($branch -eq "origin/main" -or $branch -eq "origin") {
+            continue
+          }
+          if (git branch -r --merged origin/main | Select-String -Quiet $branch) {
+            Write-Output "🟢 $branch is merged into origin/main"
+          } elseif (git branch -r --no-merged origin/main | Select-String -Quiet $branch) {
+            Write-Output "🔴 $branch is NOT merged into origin/main"
+          }
+        }
+
+    - name: Delete old merged branches
+      shell: pwsh
+      run: |
+        $branches = git for-each-ref --format='%(refname:short)' refs/remotes/origin/
+        foreach ($branch in $branches) {
+          if ($branch -eq "origin/main" -or $branch -eq "origin") {
+            continue
+          }
+          if (git branch -r --merged origin/main | Select-String -Quiet $branch) {
+            Write-Output "🟢 $branch is merged into origin/main"
+
+            $time_commit = git log -1 --pretty=format:"%at" $branch
+            $time_current = [int][double]::Parse((Get-Date -UFormat %s))
+            $time_diff = $time_current - $time_commit
+            Write-Output "Commit age: $time_diff (in sec), $([math]::Floor($time_diff / 86400)) (in days)"
+
+            if ($time_diff -lt 3000 -and $time_diff -gt 100) {
+              $branch_to_delete = $branch -replace "^origin/", ""
+              git push origin --delete $branch_to_delete
+              Write-Output "Branch $branch has been deleted successfully!"
+            } else {
+              Write-Output "Branch $branch is too young to be deleted."
+            }
+          }
+        }
+        }
+      shell: pwsh
