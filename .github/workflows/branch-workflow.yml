@@ -79,9 +79,9 @@ jobs:
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
 
             # if last commit is older than 1 month
-            if (($time_diff > 200)); then
-            	#branch_to_delete="${branch#origin/}"
-              #git push origin --delete "$branch_to_delete"
+            if (($time_diff < 3000)); then
+            	branch_to_delete="${branch#origin/}"
+              git push origin --delete "$branch_to_delete"
               echo "Branch $branch has been deleted successfully!"
             else
               echo "Branch $branch is too young to be deleted."
