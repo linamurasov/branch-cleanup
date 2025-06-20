@@ -48,14 +48,8 @@ jobs:
     # Give Merge Info about Branches 
     - name: MERGE INFO
       run: |
-        # Loop over all remote branches (refs/remotes/origin is a internal name for a 
-        # read-only copy of the remote branches from the last fetch)
-        # git for-each-ref gives list of branches
-	      # refs/remotes/origin/ specifies remote branches (so it says: list all branches but only the remote ones)
-        # --format='$(refname:short)' formats the output
-	for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
- 	# Skip symbolic reference
-  	  if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
+      	for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
+       		if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
             continue
           fi
           if git branch -r --merged origin/main | grep -q "$branch"; then
