@@ -42,7 +42,6 @@ jobs:
     # Give Merge Info about Branches: Loop 
     - name: MERGE INFO
       run: |
-        #git fetch --all
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
         # Skip symbolic reference
           #if [[ "$branch" == "origin/main" ]]; then
@@ -58,7 +57,6 @@ jobs:
     # Print the date of the last commit for all branches merged with main
     - name: COMMIT DATE
       run: |
-        #git fetch --all
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
           #if [[ "$branch" == "origin/main" ]]; then
           #  continue
@@ -82,8 +80,11 @@ jobs:
 
             # if last commit is older than 1 month
             if time_diff > 2592000; then
-              git branch -d $branch
-              echo "Branch $branch has been deleted successfully"
+            	branch_to_delete="${branch#origin/}"
+              git push origin --delete "$branch_to_delete"
+              echo "Branch $branch has been deleted successfully!"
+            else
+              echo "Branch $branch is too young to be deleted."
             fi
             
           fi
