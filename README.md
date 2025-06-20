@@ -42,7 +42,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 1 * * 0'  # Every Sunday at 1:00 AM UTC
-´´´yaml
+```
 
 ### Key Steps in the Workflow
 1) Checkout full repository history using actions/checkout@v3 with fetch-depth: 0
