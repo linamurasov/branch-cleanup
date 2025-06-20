@@ -1,13 +1,8 @@
 name: Branch Information Workflow
 
 on:
-  #push:
+  push:
   workflow_dispatch:
-    #inputs:
-    #  dry_run:
-    #    description: 'Run without deleting branches'
-    #    required: false
-    #    default: 'true'
   schedule:
     - cron: "*/10 * * * *"
 
