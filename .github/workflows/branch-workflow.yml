@@ -42,13 +42,13 @@ jobs:
     # Give Merge Info about Branches: Loop 
     - name: MERGE INFO
       run: |
-        git fetch --all
+        #git fetch --all
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
         # Skip symbolic reference
           #if [[ "$branch" == "origin/main" ]]; then
           #  continue
           #fi
-          if git branch -r --merged origin/main | grep -q "$branch$"; then
+          if git branch -r --merged origin/main | grep -q "$branch"; then
             echo "🟢 $branch is merged into origin/main"
           else
             echo "🔴 $branch is NOT merged into origin/main"
@@ -58,7 +58,7 @@ jobs:
     # Print the date of the last commit for all branches merged with main
     - name: COMMIT DATE
       run: |
-        git fetch --all
+        #git fetch --all
         for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
           #if [[ "$branch" == "origin/main" ]]; then
           #  continue
