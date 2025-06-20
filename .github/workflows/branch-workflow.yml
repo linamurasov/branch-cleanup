@@ -61,8 +61,8 @@ jobs:
           if git branch -r --merged origin/main | grep -q "$branch"; then
             echo "🟢 $branch is merged into origin/main"
             
-            echo "Last commit date for $branch:"
-            git log -1 --format=%cd "$branch" --date=short
+            #echo "Last commit date for $branch:"
+            #git log -1 --format=%cd "$branch" --date=short
             
             time_commit=$(git log -1 --pretty=format:"%at" "$branch")
             #echo "Timestamp of last commit: $time_commit"
@@ -72,9 +72,14 @@ jobs:
             
             time_diff=$((time_current - time_commit))
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
+
+            #cutoff=$(604800) # 1 week
+            #cutoff=$(2492000) # 1 month
             
-            # if last commit is older than 1 month: delete branch
-            if (($time_diff < 3000 && $time_diff > 200)); then
+            # if last commit is older than cutoff: delete branch
+            # if (($time_diff > cutoff)); then
+            # for testing
+            if (($time_diff < 3000 && $time_diff > 100)); then
             	branch_to_delete="${branch#origin/}"
               git push origin --delete "$branch_to_delete"
               echo "Branch $branch has been deleted successfully!"
