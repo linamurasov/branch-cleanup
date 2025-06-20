@@ -1,13 +1,13 @@
 name: Branch Information Workflow
 
 on:
-  push:
+  #push:
   workflow_dispatch:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: '*/5 * * * *'
 
 jobs:
-  cleanup-old-branches:
+  branch_info:
     runs-on: ubuntu-latest
 
     permissions:
@@ -18,22 +18,21 @@ jobs:
     - name: CHECKOUT
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # WICHTIG: komplette Commit-Historie holen für Merge Info
+        fetch-depth: 0  # WICHTIG: komplette Historie holen für Merge Info
     
     # Fetch all remote branches and ensure they are up-to-date
-    - name: FETCH ALL REMOTE BRANCHES
+    - name: FETCH
       run: |
         git fetch --all
-        #git checkout -B main origin/main
+        git checkout -B main origin/main
     
     # Print all branches in the repo
     - name: LIST ALL BRANCHES
       run: |
         echo "All branches in the repository:"
         git branch -a
-
+        
     # Print all remote branches that are merged with main
-    # will say that origin/mainis merged with origin/main and that origin (the repo) is merged with origin/main
     - name: LIST MERGED BRANCHES
       run: |
         echo "Remote branches merged with main:"
@@ -44,12 +43,12 @@ jobs:
       run: |
         echo "Remote branches NOT merged with main:"
         git branch -r --no-merged main
-
-    # Give Merge Info about Branches 
+    # Give Merge Info about Branches: Loop 
     - name: MERGE INFO
       run: |
-      	for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
-       		if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
+        for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
+          # Skip symbolic reference
+          if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
             continue
           fi
           if git branch -r --merged origin/main | grep -q "$branch"; then
@@ -58,7 +57,6 @@ jobs:
             echo "🔴 $branch is NOT merged into origin/main"
           fi
         done
-
     # Print the date of the last commit for all branches merged with main
     - name: CHECK AGE OF MERGED BRANCH & DELETE BRANCH
       run: |
@@ -66,32 +64,19 @@ jobs:
           if [[ "$branch" == "origin/main" || "$branch" == "origin" ]]; then
             continue
           fi
-          # give me a list of all remote branches hat have been merged with origin/main
-          # then pipe this output into the next command
-          # grep checks the outputtet list and looks for a match for "branch" (-q) quietly
-          # if grep finds the branch in the merged branches list, the if condition passes
           if git branch -r --merged origin/main | grep -q "$branch"; then
             echo "🟢 $branch is merged into origin/main"
             #echo "Last commit date for $branch:"
             #git log -1 --format=%cd "$branch" #--date=short
-
-            # examine the last (-1) commit (log) of branch, and give me only one part of the 
-            # commit info: author date, as UNIX timestamp (iso format)
             time_commit=$(git log -1 --pretty=format:"%at" "$branch")
             #echo "Timestamp of last commit: $time_commit"
-
-            # Give me current time as UNIX timestamp (iso format)
             time_current=$(date +%s)
             #echo "Timestamp of current time: $time_current"
-
-            # Calculate commit age
             time_diff=$((time_current - time_commit))
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
-
             # if last commit is older than 1 month
             if (($time_diff < 3000 && $time_diff > 200)); then
             	branch_to_delete="${branch#origin/}"
-              # delete remote branch 
               git push origin --delete "$branch_to_delete"
               echo "Branch $branch has been deleted successfully!"
             else
