@@ -43,3 +43,43 @@ on:
 6) Delete the branch from origin if:
   - It is merged into origin/main
   - The last commit is older than 30 days (2592000 seconds)
+
+## Available Workflows
+
+### 1. Branch Deletion Workflow
+
+- **Runner:** `ubuntu-latest`
+- **Triggers:** `workflow_dispatch`, scheduled every **Sunday at 1:00 AM UTC**
+- **Deletion Rule:** Deletes remote branches that:
+  - Are merged into `main`
+  - Have a last commit older than **1 month** (2592000 seconds)
+
+### 2. Branch Deletion Workflow (Testing)
+
+- **Runner:** `ubuntu-latest`
+- **Triggers:** `workflow_dispatch`, scheduled every 5 minutes (**schedule is currently commented out**)
+- **Deletion Rule:** Deletes remote branches that:
+  - Are merged into `main`
+  - Have a last commit older than **30 seconds**, but younger than **3000 seconds**
+
+### 3. Branch Deletion Workflow (Testing on Windows)
+
+- **Runner:** `windows-latest`
+- **Triggers:** `workflow_dispatch`, scheduled every 5 minutes (**schedule is currently commented out**)
+- **Deletion Rule:** Deletes remote branches that:
+  - Are merged into `main`
+  - Have a last commit older than **20 seconds**, but younger than **3000 seconds**
+
+### Testing Instructions
+
+You can use workflows **2** or **3** to test the branch deletion logic:
+
+1. Create a **new feature branch**
+2. Make a commit and **push it to the remote**
+3. Open a pull request and **merge it into `main`**
+4. Manually trigger **"Branch Deletion Workflow (Testing)"** from the Actions tab
+5. Confirm the branch is deleted after the configured time threshold
+
+These workflows help validate the logic without waiting for actual aging over days or weeks.
+
+---
