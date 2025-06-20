@@ -69,9 +69,9 @@ jobs:
           if git branch -r --merged origin/main | grep -q "$branch"; then
             echo "🟢 $branch is merged into origin/main"
             echo "Last commit date for $branch:"
-            git log -1 --format=%cd #--date=short
+            git log -1 --format=%cd "$branch" #--date=short
 
-            time_commit=$(git log -1 --pretty=format:"%at")
+            time_commit=$(git log -1 --pretty=format:"%at" "$branch")
             echo "Timestamp of last commit: $time_commit"
 
             time_current=$(date +%s)
