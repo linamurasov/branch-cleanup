@@ -41,5 +41,5 @@ on:
 4) Filter for merged branches only
 5) Determine the age of the last commit on each merged branch
 6) Delete the branch from origin if:
-- It is merged into origin/main
-- The last commit is older than 30 days (2592000 seconds)
+  - It is merged into origin/main
+  - The last commit is older than 30 days (2592000 seconds)
