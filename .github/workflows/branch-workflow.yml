@@ -81,7 +81,7 @@ jobs:
             echo "Commit age: $time_diff (in sec), $(($time_diff / 86400)) (in days)"
 
             # if last commit is older than 1 month
-            if time_diff > 2592000
+            if time_diff > 2592000; then
               git branch -d $branch
               echo "Branch $branch has been deleted successfully"
             fi
