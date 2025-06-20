@@ -1,21 +1,11 @@
 # GitHub Branch Cleanup Automation
 
-This repository includes a GitHub Actions workflow that identifies and deletes stale remote feature branches that meet the following criteria:
+This repository contains a GitHub Actions workflow designed to automatically detect and delete stale feature branches that meet the following criteria:
 
 - Already merged into the `main` branch
-- Last commit was made more than **1 month ago**
+- No recent activity: Last commit was made more than **1 month ago**
 
-The goal is to maintain a clean and manageable Git repository by automatically removing feature branches that have already been incorporated into the main codebase. This is particularly useful in development workflows based on GitHub Flow.
-
----
-
-## Objective
-
-Maintain a clean repository by:
-
-- Deleting remote feature branches that are already merged into `main`
-- Ensuring that only branches with stale, incorporated features are removed
-- Automating the process to reduce manual cleanup effort
+The goal is to maintain a clean and manageable Git repository by automating the process of removing feature branches that have already been incorporated into the main codebase. This is particularly useful in development workflows based on GitHub Flow where many short-lived branches are created and merged regularly (like dev, feature-*, etc.). Reduces manual cleanup effort.
 
 ---
 
@@ -23,9 +13,9 @@ Maintain a clean repository by:
 
 | Branch Name | Status      | Merged to `main`? | Last Commit Older Than 1 Month? |
 |-------------|-------------|-------------------|----------------------------------|
-| `feature-1` | Merged      | Yes               | Yes                              |
-| `feature-2` | Merged      | Yes               | Yes                              |
-| `feature-3` | In Progress | No                | N/A                              |
+| `feature-1` | Merged      | 🟢Yes               | Yes                              |
+| `feature-2` | Merged      | 🟢Yes               | Yes                              |
+| `feature-3` | In Progress | 🔴No                | N/A                              |
 
 Only `feature-1` and `feature-2` are eligible for deletion. `feature-3` will remain until it is merged and becomes old enough to delete.
 
